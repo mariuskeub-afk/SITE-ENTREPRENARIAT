@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chick'n Check – Automatic Coop Doors</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Chick'n Check – portes automatiques intelligentes pour poulaillers : protégez vos poules, gagnez du temps, dormez tranquille."
+  />
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --bg-card: #ffffff;
+      --accent: #2f855a;
+      --accent-soft: #c6f6d5;
+      --accent-strong: #276749;
+      --text-main: #1a202c;
+      --text-soft: #4a5568;
+      --border-soft: #e2e8f0;
+      --radius: 14px;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #edf2f7 0, #f7fafc 50%, #f5f5f5 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 8px;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 52px;
+      width: auto;
+    }
+
+    .logo-text-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .logo-text-sub {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+    }
+
+    .nav a {
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--text-soft);
+      border: 1px solid transparent;
+      transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+    }
+
+    .nav a:hover {
+      background: #edf2f7;
+      border-color: var(--border-soft);
+      color: var(--text-main);
+    }
+
+    .header-tag {
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(56, 161, 105, 0.25);
+      white-space: nowrap;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .hero {
+      padding: 26px 22px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #ffffff, #f0fff4);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 2rem;
+      font-weight: 750;
+      margin-bottom: 8px;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--text-soft);
+      margin-bottom: 16px;
+    }
+
+    .hero-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #1a202c;
+      color: #f7fafc;
+      margin-bottom: 16px;
+    }
+
+    .hero-highlight-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #48bb78;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        background 0.12s ease, color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #f7fafc;
+      box-shadow: 0 6px 14px rgba(47, 133, 90, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 9px 20px rgba(47, 133, 90, 0.4);
+      background: var(--accent-strong);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-main);
+      border: 1px solid var(--border-soft);
+    }
+
+    .btn-ghost:hover {
+      background: #edf2f7;
+      transform: translateY(-1px);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .meta-pill {
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .hero-card {
+      border-radius: 20px;
+      border: 1px dashed #cbd5e0;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 14px 12px;
+      font-size: 0.86rem;
+      color: var(--text-soft);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.06);
+    }
+
+    .hero-card-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .hero-card-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .hero-card-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .hero-card-bullet {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: #2f855a;
+      margin-top: 7px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    section {
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 16px 14px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    section:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      margin-bottom: 8px;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    ul li {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .badge {
+      font-size: 0.78rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #edf2f7;
+      color: #4a5568;
+    }
+
+    .badge.emphasis {
+      background: #2f855a;
+      color: #f7fafc;
+    }
+
+    .team-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .team-member {
+      padding: 8px 9px;
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      background: #f7fafc;
+      font-size: 0.85rem;
+    }
+
+    .team-name {
+      font-weight: 600;
+    }
+
+    .team-role {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .contact-info {
+      font-size: 0.9rem;
+    }
+
+    .contact-info a {
+      color: #2b6cb0;
+      text-decoration: none;
+    }
+
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+
+    /* --- PARTENAIRES / POINTS DE VENTE --- */
+
+    .retailer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .retailer-card {
+      background: #f7fafc;
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .retailer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .retailer-logo {
+      height: 34px;
+      width: auto;
+    }
+
+    .retailer-name {
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .retailer-tag {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .retailer-link a {
+      font-size: 0.82rem;
+      text-decoration: none;
+      color: #2b6cb0;
+    }
+
+    .retailer-link a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 18px;
+      font-size: 0.78rem;
+      color: #a0aec0;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 18px;
+      }
+
+      .nav {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="logo">
+        <img src="logo-chickn-check.png" alt="Chick'n Check" class="logo-img" />
+        <div>
+          <div class="logo-text-title">Chick'n Check</div>
+          <div class="logo-text-sub">Automatic Coop Doors</div>
+        </div>
+      </div>
+
+      <div class="nav">
+        <a href="#probleme">Problème</a>
+        <a href="#solution">Solution</a>
+        <a href="#points-de-vente">Points de vente</a>
+        <a href="#equipe">Équipe</a>
+        <a href="#contact">Contact</a>
+        
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <div>
+          <div class="hero-highlight">
+            <span class="hero-highlight-dot"></span>
+            <span>Protégez vos poules, gagnez du temps, dormez tranquille.</span>
+          </div>
+          <h1 class="hero-title">La porte qui veille sur vos poules à votre place.</h1>
+          <p class="hero-sub">
+            Smart Coop Door, développé par Chick'n Check, automatise l’ouverture et la fermeture de votre poulailler
+            pour réduire les risques d’attaques de prédateurs et vous libérer des contraintes horaires.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#contact" class="btn-primary">
+              Nous contacter
+              <span>↗</span>
+            </a>
+            <a href="#solution" class="btn-ghost">
+              Découvrir la solution
+            </a>
+          </div>
+
+          <div class="hero-meta">
+            <span class="meta-pill">Sécurité des poules</span>
+            <span class="meta-pill">Moins de stress pour le propriétaire</span>
+            <span class="meta-pill">Installation sur poulailler existant</span>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-card-title">En un coup d’œil</div>
+          <ul class="hero-card-list">
+            <li>
+              <span class="hero-card-bullet"></span>
+              <span>Ouverture / fermeture automatiques,comptage de poules.</span>
+            </li>
+            <li>
+              <span class="hero-card-bullet"></span>
+              <span>Sécurité renforcée contre les renards et autres prédateurs.</span>
+            </li>
+            <li>
+              <span class="hero-card-bullet"></span>
+              <span>Contrôle simple et réglages personnalisables.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- PROBLÈME + SOLUTION -->
+      <div class="grid">
+        <section id="probleme">
+          <h2>🚨 Le problème</h2>
+          <p>
+            Les propriétaires de poules font face à plusieurs contraintes au quotidien :
+          </p>
+          <ul>
+            <li>Devoir être présent à heure fixe pour ouvrir et fermer le poulailler.</li>
+            <li>Risque d’oublier des poules dehors, surtout en hiver ou en cas d’imprévu.</li>
+            <li>Vulnérabilité aux prédateurs (renards, fouines, chiens, etc.).</li>
+            <li>Solutions existantes parfois peu intelligentes, peu fiables ou complexes à configurer.</li>
+          </ul>
+          <p>
+            Résultat : du stress, une perte de temps et parfois la perte d’animaux.
+          </p>
+        </section>
+
+        <section id="solution">
+          <h2>✅ Notre solution</h2>
+          <p>
+            Smart Coop Door est une <strong>porte automatique connectée</strong> qui
+            transforme un poulailler classique en poulailler intelligent.
+          </p>
+          <ul>
+            <li>Ouverture/fermeture automatique basée sur l’heure ou la luminosité.</li>
+            <li>Système de sécurité et mécanisme anti-écrasement des poules.</li>
+            <li>Interface simple (boîtier de contrôle ou application) pour régler les paramètres.</li>
+            <li>Installation possible sur des poulaillers existants.</li>
+          </ul>
+          <div class="badge-row">
+            <span class="badge emphasis">Fiable</span>
+            <span class="badge">Simple</span>
+            <span class="badge">Abordable</span>
+            <span class="badge">Pensé pour les particuliers</span>
+          </div>
+        </section>
+      </div>
+
+      <!-- PROPOSITION DE VALEUR + CIBLE -->
+      <div class="grid">
+        <section>
+          <h2>🎯 Proposition de valeur</h2>
+          <p>
+            Avec notre porte intelligente, le propriétaire de poules :
+          </p>
+          <ul>
+            <li>Ne se préoccupe plus des horaires d’ouverture et de fermeture.</li>
+            <li>Réduit fortement le risque d’attaque de renards et autres prédateurs.</li>
+            <li>Gagne du temps et de la flexibilité dans son quotidien.</li>
+            <li>Garde la maîtrise grâce à des réglages personnalisables.</li>
+            <li>Evite le traumatisme après avoir perdu une poule.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>👥 Pour qui ?</h2>
+          <ul>
+            <li>Propriétaires de poules particuliers (jardin, terrain, ferme familiale).</li>
+            <li>Petits éleveurs professionnels.</li>
+            <li>Fermes pédagogiques, écoles, associations disposant d’un poulailler.</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- POINTS DE VENTE / PARTENAIRES -->
+      <section id="points-de-vente">
+        <h2>🏪 Où trouver notre produit ?</h2>
+        <p>
+          Lors de la phase de validation, plusieurs enseignes se sont montrées intéressées
+          pour distribuer <strong>Smart Coop Door</strong>. Notre solution pourra être
+          proposée via les partenaires suivants (sous réserve de finalisation du projet industriel) :
+        </p>
+
+        <div class="retailer-grid">
+          <div class="retailer-card">
+            <div class="retailer-header">
+              <img src="logo-brico.png" alt="Brico" class="retailer-logo" />
+              <div>
+                <div class="retailer-name">Brico</div>
+                <div class="retailer-tag">Magasins de bricolage et jardinage</div>
+              </div>
+            </div>
+            <div class="retailer-link">
+              <a href="https://www.brico.be/" target="_blank" rel="noreferrer">
+                Visiter le site Brico ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="retailer-card">
+            <div class="retailer-header">
+              <img src="logo-faune-flore.png" alt="Faune &amp; Flore" class="retailer-logo" />
+              <div>
+                <div class="retailer-name">Faune &amp; Flore</div>
+                <div class="retailer-tag">Spécialiste animaux & jardin</div>
+              </div>
+            </div>
+            <div class="retailer-link">
+              <a href="https://www.fauneetflore.be/" target="_blank" rel="noreferrer">
+                Visiter le site Faune &amp; Flore ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VALIDATION + ÉQUIPE -->
+      <div class="grid">
+        
+
+        <section id="equipe">
+          <h2>👨‍🎓 Qui sommes-nous ?</h2>
+          <p>
+            Nous sommes cinq étudiants en <strong>Master 2 Ingénieur Industriel</strong>, passionnés
+            par l’innovation produit et la conception de systèmes intelligents.
+          </p>
+          <div class="team-list">
+            <div class="team-member">
+              <div class="team-name">Eleonore</div>
+              <div class="team-role">Gestion de projet & coordination</div>
+            </div>
+            <div class="team-member">
+              <div class="team-name">Sebastien</div>
+              <div class="team-role">Technicien</div>
+            </div>
+            <div class="team-member">
+              <div class="team-name">Marius</div>
+              <div class="team-role">Technicien</div>
+            </div>
+            <div class="team-member">
+              <div class="team-name">Luca</div>
+              <div class="team-role">Business model & finances</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- CONTACT -->
+      <section id="contact">
+        <h2>📩 Contact</h2>
+        <p>
+          Intéressé·e par le projet, un partenariat ou un retour ?
+          N’hésitez pas à nous contacter :
+        </p>
+        <div class="contact-info">
+          <p>
+            ✉️ Email : <a href="mailto:[votre-email@exemple.com]">[votre-email@exemple.com]</a>
+          </p>
+          <p>
+            🔗 LinkedIn :
+            <a href="[https://www.linkedin.com/in/votre-profil]" target="_blank" rel="noreferrer">
+              [Profil LinkedIn 1]
+            </a>
+            &nbsp;|&nbsp;
+            <a href="[https://www.linkedin.com/in/votre-profil2]" target="_blank" rel="noreferrer">
+              [Profil LinkedIn 2]
+            </a>
+          </p>
+          <p>
+            ☎️ Téléphone (optionnel) : [numéro de téléphone]
+          </p>
+        </div>
+      </section>
+
+      <footer>
+        Chick'n Check – Smart Coop Door · Projet académique, tous droits réservés.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
